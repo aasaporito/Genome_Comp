@@ -29,8 +29,8 @@ class Alignment:
 		self.SEQ = entry[9]
 		self.QUALITY = entry[10]
 		
-		if self.FLAG == 4:
-			IS_MAPPED = False
+		if self.FLAG == '4':
+			self.IS_MAPPED = False
 	
 	def __repr__(self):
 		return "Alignment()"
