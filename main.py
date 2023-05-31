@@ -1,8 +1,7 @@
 # SAM Fileref: https://samtools.github.io/hts-specs/SAMv1.pdf
 # Resource: DeBrujin: 
 # https://eaton-lab.org/slides/genomics/answers/nb-10.2-de-Bruijn.html
-import toyplot.browser
-import matplotlib.pyplot as plt
+
 
 from DeBruijn import *
 from Alignment import Alignment

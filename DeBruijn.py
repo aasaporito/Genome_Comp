@@ -1,5 +1,5 @@
 import networkx as nx
-
+import matplotlib.pyplot as plt
 ''' 
 Split a sequence into parts of length k and return them with their 
 respect counts.
