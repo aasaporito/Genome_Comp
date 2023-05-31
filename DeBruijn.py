@@ -64,7 +64,7 @@ def plot_debruijn_graph(edges, width=4000, height=4000):
         tmarker=">",
         vsize=25,
         vstyle={"stroke": "black", "stroke-width": 2, "fill": "none"},
-        vlstyle={"font-size": "0px"},
+        vlstyle={"font-size": "6px"}, #label size
         estyle={"stroke": "black", "stroke-width": 2},
         layout=toyplot.layout.FruchtermanReingold(edges=toyplot.layout.CurvedEdges()))
     return graph
