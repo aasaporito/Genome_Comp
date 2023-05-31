@@ -68,6 +68,10 @@ def save_graph(graph):
     plt.savefig("graph.png", format="PNG")
     plt.clf()
 
-# TODO 
-def test_linearity(edges):
-		return
+# TODO: https://networkx.org/documentation/stable/reference/functions.html#nodes
+def test_linearity(nodes, graph):
+        for node in nodes: 
+            neighbors = nx.all_neighbors(graph, node)
+            for n in neighbors:
+                print(n)
+	

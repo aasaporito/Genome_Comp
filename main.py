@@ -52,13 +52,15 @@ def test_plot(sequence, k):
     #print(edges)
 
     g1 = generate_diGraph(edges)
-    #save_graph(g1)
+
+    save_graph(g1)
+    return g1
 
 def main():
     #process_data()    
-    #test_plot("ACTGAGTACCATGGAC",4)
-
-
+    g1 = test_plot("ACTGAGTACCATGGAC",4)
+    test_linearity(g1.nodes(), g1)
+    print(g1.nodes)
 
 if __name__ == "__main__":
     main()
