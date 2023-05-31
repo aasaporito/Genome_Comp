@@ -2,6 +2,7 @@
 # Resource: DeBrujin: 
 # https://eaton-lab.org/slides/genomics/answers/nb-10.2-de-Bruijn.html
 import toyplot.browser
+import matplotlib.pyplot as plt
 
 from DeBruijn import *
 from Alignment import Alignment
@@ -20,7 +21,7 @@ def process_data():
         for line in infile:
 
             match lineCount:
-                case 2:
+                case 10000:
                     break  # Avoid reading the whole file, for now
 
                 case _:
@@ -38,7 +39,8 @@ def process_data():
                             #sequences = get_counts_from_seq("ATGGTATGTA", 3)
                             edges = get_edges(sequences)
 
-                            toyplot.browser.show(plot_debruijn_graph(edges)[0])
+                            g1 = generate_diGraph(edges)
+                            print(len(g1.nodes()))
 
             lineCount += 1
 
@@ -46,13 +48,17 @@ def test_plot(sequence, k):
     #Circular Sequence example: test_plot("ACTGAGTACCATGGAC",4)
     sequences = get_counts_from_seq(sequence, k)
     edges = get_edges(sequences)
-    print(sequences)
-    print(edges)
-    toyplot.browser.show(plot_debruijn_graph(edges, width=1000, height=1000)[0])
+    
+    #print(sequences)
+    #print(edges)
+
+    g1 = generate_diGraph(edges)
+    #save_graph(g1)
 
 def main():
     #process_data()    
-    test_plot("ACTGAGTACCATGGAC",4)
+    #test_plot("ACTGAGTACCATGGAC",4)
+
 
 
 if __name__ == "__main__":

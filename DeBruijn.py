@@ -1,4 +1,4 @@
-import toyplot
+import networkx as nx
 
 ''' 
 Split a sequence into parts of length k and return them with their 
@@ -53,18 +53,21 @@ def get_edges(collection):
 
     return edges
 
+#edges should be a list of tuples    
+def generate_diGraph(edges):
+    graph = nx.DiGraph()
+    graph.add_edges_from(edges)
 
-def plot_debruijn_graph(edges, width=4000, height=4000):
-    "returns a toyplot graph from an input of edges"
-    graph = toyplot.graph(
-        [i[0] for i in edges],
-        [i[1] for i in edges],
-        width=width,
-        height=height,
-        tmarker=">",
-        vsize=25,
-        vstyle={"stroke": "black", "stroke-width": 2, "fill": "none"},
-        vlstyle={"font-size": "6px"}, #label size
-        estyle={"stroke": "black", "stroke-width": 2},
-        layout=toyplot.layout.FruchtermanReingold(edges=toyplot.layout.CurvedEdges()))
     return graph
+
+# TODO: Add name as file name parameter
+def save_graph(graph):
+    ## Saves the graph as an image
+    plt.tight_layout()
+    nx.draw_networkx(graph, arrows=True)
+    plt.savefig("graph.png", format="PNG")
+    plt.clf()
+
+# TODO 
+def test_linearity(edges):
+		return
