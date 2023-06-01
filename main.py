@@ -4,6 +4,9 @@
 from DeBruijn import *
 from Alignment import Alignment
 from tests import *
+from file_tools import *
+
+import configparser
 
 # Helper function to determine if it is a header entry
 def is_header(entry):
@@ -11,41 +14,47 @@ def is_header(entry):
         return True
 
 def process_data():
-    file = 'Data/PB644_EB817.hifi_reads.sam'
+    config = configparser.ConfigParser()
+    config.read('config.ini')
 
-    with open(file, 'r') as infile:
-        lineCount = 0
+    files = get_files(str(config['DEFAULT']['data_path']))
 
-        for line in infile:
 
-            match lineCount:
-                case 10000:
-                    break  # Avoid reading the whole file, for now
+    for file in files:
 
-                case _:
-                    entry = line.split("\t")
-                    if not is_header(entry):
-                        alignment = Alignment(entry)
-                        # print(alignment)
+        with open(file, 'r') as infile:
+            lineCount = 0
 
-                        if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
-                            print(alignment)
+            for line in infile:
 
-                            
-                            #Find overlapping sequences
-                            sequences = get_counts_from_seq(alignment.SEQ, k=50)
-                            #sequences = get_counts_from_seq("ATGGTATGTA", 3)
-                            edges = get_edges(sequences)
+                match lineCount:
+                    case 10000:
+                        break  # Avoid reading the whole file, for now
 
-                            g1 = generate_diGraph(edges)
-                            if loop_test(g1):
-                                print("Loop found")
-                                save_graph(g1, alignment)
+                    case _:
+                        entry = line.split("\t")
+                        if not is_header(entry):
+                            alignment = Alignment(entry)
+                            # print(alignment)
+
+                            if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
+                                print(alignment)
+
                                 
-                            else:
-                                print("No loop found\n\n")
+                                #Find overlapping sequences
+                                sequences = get_counts_from_seq(alignment.SEQ, k=int(config['DEFAULT']['kmer']))
+                                #sequences = get_counts_from_seq("ATGGTATGTA", 3)
+                                edges = get_edges(sequences)
 
-            lineCount += 1
+                                g1 = generate_diGraph(edges)
+                                if loop_test(g1):
+                                    print("Loop found")
+                                    save_graph(g1, alignment, file)
+                                    
+                                else:
+                                    print("No loop found\n\n")
+
+                lineCount += 1
 
 def main():
     process_data()    
