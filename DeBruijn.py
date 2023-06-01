@@ -69,12 +69,12 @@ def save_graph(graph):
     plt.clf()
 
 # TODO: https://networkx.org/documentation/stable/reference/functions.html#nodes
-# Returns true when the graph is a loop
+# Returns true when the graph is a loop with no deadends
 # Assumption: a graph is a loop when no input or output edge exists more than once
-# TODO: Do I need to test if each node has 2 connections?
 def loop_test(graph):
     all_inputs = []
     all_outputs = []
+    total_edges = 0
 
     for node in graph.nodes(): 
         in_edges = list(nx.neighbors(graph, node))
@@ -86,8 +86,11 @@ def loop_test(graph):
         all_inputs.extend(in_edges)
         all_outputs.extend(all_edges)
 
+    total_edges = len(all_inputs) + len(all_outputs)
 
-    return not(check_dupes(all_inputs) and check_dupes(all_outputs))
+    has_deadends = not (total_edges % 2 == 0)
+    is_loop = not(check_dupes(all_inputs) and check_dupes(all_outputs))
+    return is_loop and not has_deadends
 
 
 # Utilize that sets cannot have duplicates to efficiently check for dupes
