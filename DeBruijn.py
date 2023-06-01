@@ -1,5 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+
+from file_tools import *
 ''' 
 Split a sequence into parts of length k and return them with their 
 respect counts.
@@ -64,13 +66,7 @@ def generate_diGraph(edges):
 # Illegal characters in the filename are replaced with 2 '_'
 # TODO: Nested folders for each fileName
 def save_graph(graph, alignment, sam_name):
-
-    path = (sam_name.split('.')[0]).split("/")
-    path.remove("Data")
-    path = "/".join(path)
-
-    file_name = "Output/" + path + "_" + \
-        alignment.NAME.replace("/", "__") + "_" + alignment.MAP_QUALITY + ".png"
+    file_name = generate_output_path(sam_name, alignment)
     
     ## Saves the graph as an image
     plt.rcParams['figure.figsize'] = [100, 100]
@@ -80,7 +76,8 @@ def save_graph(graph, alignment, sam_name):
     plt.clf()
 
 # Returns true when the graph is a loop with no deadends
-# Assumption: a graph is a loop when no input or output edge exists more than once
+# Assumption: a graph is a loop when no input or output edge exists more than once, nodes = edges
+# A: Graph is traversable, where nodes traveled = total nodes
 def loop_test(graph):
     all_inputs = []
     all_outputs = []
@@ -105,11 +102,18 @@ def loop_test(graph):
     #Checks that no input or output edge exists twice
     is_loop = not(check_dupes(all_inputs) and check_dupes(all_outputs))
 
-    return is_loop and edges_eq_nodes
+    return is_loop and edges_eq_nodes and is_traversable(graph)
 
 
 # Utilize that sets cannot have duplicates to efficiently check for dupes
 # True indicates that there are duplicates
 def check_dupes(input_list):
     return len(input_list) != len(set(input_list))
-	
+
+# Tests if each node is visited in a traversal	(no disconnected seperate graphs)
+def is_traversable(graph):
+    nodes = graph.nodes()
+    traveled_nodes = list(nx.dfs_preorder_nodes(graph))
+
+    return len(traveled_nodes) == len(nodes)
+
