@@ -29,7 +29,7 @@ class Alignment:
 		self.SEQ = entry[9]
 		self.QUALITY = entry[10]
 		
-		if self.FLAG == '4' and self.SEQ == "*":
+		if self.FLAG == '4' or self.SEQ == "*":
 			self.IS_MAPPED = False
 	
 	def __repr__(self):
