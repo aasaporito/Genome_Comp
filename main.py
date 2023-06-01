@@ -3,6 +3,7 @@
 # https://eaton-lab.org/slides/genomics/answers/nb-10.2-de-Bruijn.html
 from DeBruijn import *
 from Alignment import Alignment
+from tests import *
 
 # Helper function to determine if it is a header entry
 def is_header(entry):
@@ -40,7 +41,7 @@ def process_data():
                             if loop_test(g1):
                                 print("Loop found")
                                 save_graph(g1, alignment)
-                                break
+                                
                             else:
                                 print("No loop found\n\n")
 
