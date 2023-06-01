@@ -82,10 +82,10 @@ def generate_diGraph(edges):
     return graph
 
 
-# TODO: Nested folders for each fileName
+#  todo 3 (general) +0: Nested folders for each filename
 def save_graph(graph, alignment, sam_name):
     """Summary
-        Saves a graph to disk. Requires a folder labeled "Output" (TODO <-).
+        Saves a graph to disk. Requires a folder labeled "Output" (#  todo 4 (general) +0: Generate output folder <-).
         Stores with the name pattern: Output/fileName_alignmentName_MAPQUALITY.png
         Illegal characters in the filename are replaced with 2 '_'
     Args:
@@ -174,7 +174,7 @@ def is_traversable(graph):
         bool: Returns true if a graph is traversable as defined above.
     """
     nodes = graph.nodes()
-    traveled_nodes = list(nx.dfs_preorder_nodes(graph)) #TODO: Test this for discontinuous graphs
+    traveled_nodes = list(nx.dfs_preorder_nodes(graph)) #  todo 5 (general) +0: Test this for discontinuous graphs
 
     return len(traveled_nodes) == len(nodes)
 

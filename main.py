@@ -24,7 +24,7 @@ def is_header(entry):
 
 #
 # Current primary function to process data
-# TODO: Rework/make usable for test data
+#  todo 2 (general) +0: Rework/make usable for test data
 def process_data():
     config = configparser.ConfigParser()
     config.read('config.ini')

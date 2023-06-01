@@ -1,5 +1,5 @@
 from DeBruijn import *
-#TODO Rework/erase
+#  todo 1 (general) +0: Rework/erase file
 def test_plot(sequence, k):
     """Summary
         Non-functional method for testing hand-input data.

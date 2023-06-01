@@ -44,4 +44,4 @@ def generate_output_path(sam_name, alignment):
 
 	return file_name
 
-#TODO Log file generation
+#  todo 6 (general) +0: LogFile generation
