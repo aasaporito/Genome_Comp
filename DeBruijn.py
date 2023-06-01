@@ -69,9 +69,29 @@ def save_graph(graph):
     plt.clf()
 
 # TODO: https://networkx.org/documentation/stable/reference/functions.html#nodes
-def test_linearity(nodes, graph):
-        for node in nodes: 
-            neighbors = nx.all_neighbors(graph, node)
-            for n in neighbors:
-                print(n)
+# Returns true when the graph is a loop
+# Assumption: a graph is a loop when no input or output edge exists more than once
+# TODO: Do I need to test if each node has 2 connections?
+def loop_test(graph):
+    all_inputs = []
+    all_outputs = []
+
+    for node in graph.nodes(): 
+        in_edges = list(nx.neighbors(graph, node))
+        all_edges = list(nx.all_neighbors(graph, node)) #Becomes only output edges
+
+        for edge in all_edges:
+            if edge in in_edges:
+                all_edges.remove(edge)
+        all_inputs.extend(in_edges)
+        all_outputs.extend(all_edges)
+
+
+    return not(check_dupes(all_inputs) and check_dupes(all_outputs))
+
+
+# Utilize that sets cannot have duplicates to efficiently check for dupes
+# True indicates that there are duplicates
+def check_dupes(input_list):
+    return len(input_list) != len(set(input_list))
 	

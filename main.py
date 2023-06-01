@@ -59,8 +59,8 @@ def test_plot(sequence, k):
 def main():
     #process_data()    
     g1 = test_plot("ACTGAGTACCATGGAC",4)
-    test_linearity(g1.nodes(), g1)
-    print(g1.nodes)
+    loop_test(g1)
+    #print(g1.nodes())
 
 if __name__ == "__main__":
     main()
