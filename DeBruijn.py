@@ -60,10 +60,18 @@ def generate_diGraph(edges):
 
     return graph
 
-# TODO: Add name as file name parameter
-def save_graph(graph, alignment):
+# Stores with the name pattern: Output/fileName_alignmentName_MAPQUALITY.png
+# Illegal characters in the filename are replaced with 2 '_'
+# TODO: Nested folders for each fileName
+def save_graph(graph, alignment, sam_name):
 
-    file_name = "Output/" + alignment.NAME.replace("/", "__") + "_" + alignment.MAP_QUALITY + ".png"
+    path = (sam_name.split('.')[0]).split("/")
+    path.remove("Data")
+    path = "/".join(path)
+
+    file_name = "Output/" + path + "_" + \
+        alignment.NAME.replace("/", "__") + "_" + alignment.MAP_QUALITY + ".png"
+    
     ## Saves the graph as an image
     plt.rcParams['figure.figsize'] = [100, 100]
     nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=100)
@@ -71,7 +79,6 @@ def save_graph(graph, alignment):
     plt.savefig(file_name, format="PNG")
     plt.clf()
 
-# TODO: https://networkx.org/documentation/stable/reference/functions.html#nodes
 # Returns true when the graph is a loop with no deadends
 # Assumption: a graph is a loop when no input or output edge exists more than once
 def loop_test(graph):
