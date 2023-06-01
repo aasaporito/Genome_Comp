@@ -40,7 +40,7 @@ class Alignment:
 		"""Standard constructor
 		
 		Args:
-		    entry String: A complete alignment entry in SAM v1 format
+		    entry (str): A complete alignment entry in SAM v1 format
 		"""
 		self.NAME = entry[0]
 		self.FLAG = entry[1]
@@ -61,7 +61,7 @@ class Alignment:
 		"""Summary
 		
 		Returns:
-		    TYPE: String
+		    TYPE: (str)
 		"""
 		return "Alignment()"
 		
@@ -69,7 +69,7 @@ class Alignment:
 		""" Displays the contents of an alignment.
 		
 		Returns:
-		    TYPE: String
+		    TYPE: (str)
 		"""
 		out = " Name: {} \n Flag: {} \n REF_SEQ: {} \n POS: {} \n Quality: {} \n CIGAR: {} \n NEXT_SEQ_NAME: {} \n NEXT_POS: {} \n LENGTH: {} \n QUALITY: {} \n" \
 		.format(self.NAME, self.FLAG, self.REF_SEQ_NAME, self.POSITION, self.MAP_QUALITY, self.CIGAR, \
