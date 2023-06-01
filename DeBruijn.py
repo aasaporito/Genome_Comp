@@ -63,7 +63,7 @@ def generate_diGraph(edges):
 # TODO: Add name as file name parameter
 def save_graph(graph, alignment):
 
-    file_name = alignment.NAME.replace("/", "__") + "_" + alignment.MAP_QUALITY + ".png"
+    file_name = "Output/" + alignment.NAME.replace("/", "__") + "_" + alignment.MAP_QUALITY + ".png"
     ## Saves the graph as an image
     plt.rcParams['figure.figsize'] = [100, 100]
     nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=100)
