@@ -61,12 +61,14 @@ def generate_diGraph(edges):
     return graph
 
 # TODO: Add name as file name parameter
-def save_graph(graph):
+def save_graph(graph, alignment):
+
+    file_name = alignment.NAME.replace("/", "__") + "_" + alignment.MAP_QUALITY + ".png"
     ## Saves the graph as an image
-    plt.rcParams['figure.figsize'] = [300, 300]
-    nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=10)
-    plt.show()
-    #plt.savefig("graph.png", format="PNG")
+    plt.rcParams['figure.figsize'] = [100, 100]
+    nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=100)
+    #plt.show()
+    plt.savefig(file_name, format="PNG")
     plt.clf()
 
 # TODO: https://networkx.org/documentation/stable/reference/functions.html#nodes
@@ -84,6 +86,7 @@ def loop_test(graph):
         for edge in all_edges:
             if edge in in_edges:
                 all_edges.remove(edge)
+
         all_inputs.extend(in_edges)
         all_outputs.extend(all_edges)
 

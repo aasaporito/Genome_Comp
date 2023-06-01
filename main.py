@@ -1,8 +1,6 @@
 # SAM Fileref: https://samtools.github.io/hts-specs/SAMv1.pdf
 # Resource: DeBrujin: 
 # https://eaton-lab.org/slides/genomics/answers/nb-10.2-de-Bruijn.html
-
-
 from DeBruijn import *
 from Alignment import Alignment
 
@@ -41,8 +39,8 @@ def process_data():
                             g1 = generate_diGraph(edges)
                             if loop_test(g1):
                                 print("Loop found")
-                                save_graph(g1)
-                                return
+                                save_graph(g1, alignment)
+                                break
                             else:
                                 print("No loop found\n\n")
 
@@ -57,9 +55,12 @@ def test_plot(sequence, k):
     #print(edges)
 
     g1 = generate_diGraph(edges)
-    print("Loop test: " + loop_test(g1))
-
-    save_graph(g1)
+    if loop_test(g1):
+        print("Loop found")
+        save_graph(g1)
+        return
+    else:
+        print("No loop found\n\n")
     return g1
 
 def main():
