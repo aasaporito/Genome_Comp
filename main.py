@@ -42,6 +42,9 @@ def process_data():
                             if loop_test(g1):
                                 print("Loop found")
                                 save_graph(g1)
+                                return
+                            else:
+                                print("No loop found\n\n")
 
             lineCount += 1
 
