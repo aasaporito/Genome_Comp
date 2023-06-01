@@ -39,8 +39,7 @@ def process_data():
 
                             if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
                                 print(alignment)
-
-                                
+                 
                                 #Find overlapping sequences
                                 sequences = get_counts_from_seq(alignment.SEQ, k=int(config['DEFAULT']['kmer']))
                                 #sequences = get_counts_from_seq("ATGGTATGTA", 3)
