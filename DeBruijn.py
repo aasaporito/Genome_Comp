@@ -63,9 +63,10 @@ def generate_diGraph(edges):
 # TODO: Add name as file name parameter
 def save_graph(graph):
     ## Saves the graph as an image
-    plt.tight_layout()
-    nx.draw_networkx(graph, arrows=True)
-    plt.savefig("graph.png", format="PNG")
+    plt.rcParams['figure.figsize'] = [300, 300]
+    nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=10)
+    plt.show()
+    #plt.savefig("graph.png", format="PNG")
     plt.clf()
 
 # TODO: https://networkx.org/documentation/stable/reference/functions.html#nodes
@@ -88,9 +89,13 @@ def loop_test(graph):
 
     total_edges = len(all_inputs) + len(all_outputs)
 
-    has_deadends = not (total_edges % 2 == 0)
+    #Implies graph loops on itself (edges/2 because total_edges counts in and out)
+    edges_eq_nodes = (total_edges/2 == len(graph.nodes()))
+
+    #Checks that no input or output edge exists twice
     is_loop = not(check_dupes(all_inputs) and check_dupes(all_outputs))
-    return is_loop and not has_deadends
+
+    return is_loop and edges_eq_nodes
 
 
 # Utilize that sets cannot have duplicates to efficiently check for dupes
