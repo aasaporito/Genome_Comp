@@ -20,3 +20,5 @@ def generate_output_path(sam_name, alignment):
 	file_name = "Output/" + path + "_" + alignment.NAME.replace("/", "__") + "_" + alignment.MAP_QUALITY + ".png"
 
 	return file_name
+
+#TODO Log file generation
