@@ -13,6 +13,9 @@
  general 5: +0 "DeBruijn.py" asaporito 23/06/01 16:03:10
 	Test this for discontinuous graphs
 
- general 6: +0 "file_tools.py" asaporito 23/06/01 16:03:30
+ general 6: +0 "file_tools.py" asaporito 23/06/01 16:10:31
 	LogFile generation
+
+ general 7: +0 "file_tools.py" asaporito 23/06/01 16:08:39
+	Setup tools, making folders automatically etc
 

@@ -45,3 +45,4 @@ def generate_output_path(sam_name, alignment):
 	return file_name
 
 #  todo 6 (general) +0: LogFile generation
+#  todo 7 (general) +0: Setup tools, making folders automatically etc
