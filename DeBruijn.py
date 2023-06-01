@@ -1,19 +1,26 @@
+"""Summary
+    Contains contains functions to generate directional graphs, traverse,
+    and save them. Additionally tests if the graph is a directional circuit
+    with no overlapping nodes traversed.
+"""
 import networkx as nx
 import matplotlib.pyplot as plt
 
 from file_tools import *
-''' 
-Split a sequence into parts of length k and return them with their 
-respect counts.
-
-Parameters: 
-	- seq: an input string
-	- k: chunk sizes to test for overlap
-Returns a dictionary.
-'''
 
 
 def get_counts_from_seq(seq, k=50, circular=True):
+    """Summary
+        Split a sequence into k-mers of length k and return them with their 
+        respect counts.
+    Args:
+        seq (str): Data to process, i.e. a portion of DNA.
+        k (int, optional): k-mer size. 50 by default.
+        circular (bool, optional): Indicates whether wrap around should be included in k-mers. True by default.
+    
+    Returns:
+        dict: A collection of k-mers
+    """
     collection = {}  # dict
 
     for i in range(0, len(seq)):
@@ -39,10 +46,15 @@ def get_counts_from_seq(seq, k=50, circular=True):
     return collection
 
 
-'''
-'''
 def get_edges(collection):
-
+    """Summary
+        Generates all edges between a given collection of k-mers.
+    Args:
+        collection (dict): A collection of k-mers
+    
+    Returns:
+        set: A set of all edges between the given collection's overlap between items.
+    """
     edges = set()
 
     for j in collection:
@@ -54,31 +66,60 @@ def get_edges(collection):
                     edges.add((k[:-1], j[:-1]))  # Add overlap from k to j
 
     return edges
-
-#edges should be a list of tuples    
+   
 def generate_diGraph(edges):
+    """Summary
+        Generates a directional graph from a collection of edges.
+    Args:
+        edges (list of tuples): A list containing tuples indicating the path of each edge.
+    
+    Returns:
+        DiGraph: A DiGraph object from the networkx library.
+    """
     graph = nx.DiGraph()
     graph.add_edges_from(edges)
 
     return graph
 
-# Stores with the name pattern: Output/fileName_alignmentName_MAPQUALITY.png
-# Illegal characters in the filename are replaced with 2 '_'
+
 # TODO: Nested folders for each fileName
 def save_graph(graph, alignment, sam_name):
+    """Summary
+        Saves a graph to disk. Requires a folder labeled "Output" (TODO <-).
+        Stores with the name pattern: Output/fileName_alignmentName_MAPQUALITY.png
+        Illegal characters in the filename are replaced with 2 '_'
+    Args:
+        graph (DiGraph): A directional graph from networkx
+        alignment (Alignment): An Alignment objected generated from a SAM entry
+        sam_name (str): Name of the SAM file storing the alignment.
+    """
     file_name = generate_output_path(sam_name, alignment)
     
     ## Saves the graph as an image
     plt.rcParams['figure.figsize'] = [100, 100]
     nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=100)
+
+    #Displays the graph, pauses running
     #plt.show()
+
     plt.savefig(file_name, format="PNG")
     plt.clf()
 
-# Returns true when the graph is a loop with no deadends
-# Assumption: a graph is a loop when no input or output edge exists more than once, nodes = edges
-# A: Graph is traversable, where nodes traveled = total nodes
 def loop_test(graph):
+    """Summary
+        Returns true when the graph is a 1-directional closed circuit. 
+
+        Assumptions to return True:
+            - No input edge exists more than once
+            - No output edge exists more than once
+            - The amount of edges must equal the amount of nodes
+            - The graph is traversable by visiting every node once. (nodes traveled = total nodes)
+    Args:
+        graph (DiGraph): A directional graph from networkx
+    
+    Returns:
+        bool: Indicates that the graph is a 1-directional closed circuit.
+    """
     all_inputs = []
     all_outputs = []
     total_edges = 0
@@ -106,14 +147,34 @@ def loop_test(graph):
 
 
 # Utilize that sets cannot have duplicates to efficiently check for dupes
-# True indicates that there are duplicates
 def check_dupes(input_list):
+    """Summary
+        Helper function for test_loop(). Checks if there are multiple edges entering each node.
+        Does not find which node has multiple entries.
+    Args:
+        input_list (list): A list of edges (Typically a collection of input edges or output edges.
+        But not both simultaneously)
+    
+    Returns:
+        bool: Returns true when a node has multiple edges in input_list.
+    """
     return len(input_list) != len(set(input_list))
 
 # Tests if each node is visited in a traversal	(no disconnected seperate graphs)
 def is_traversable(graph):
+    """Summary
+        Helper function for test_loop(). Checks if a graph contains multiple closed circuits
+        that are disconnected from each other. A graph is traversable in this context when a 
+        traverse passes each node sequentially. The total amount of nodes traversed should equal
+        the total amount of nodes.
+    Args:
+        graph (DiGraph): A directional graph from networkx
+    
+    Returns:
+        bool: Returns true if a graph is traversable as defined above.
+    """
     nodes = graph.nodes()
-    traveled_nodes = list(nx.dfs_preorder_nodes(graph))
+    traveled_nodes = list(nx.dfs_preorder_nodes(graph)) #TODO: Test this for discontinuous graphs
 
     return len(traveled_nodes) == len(nodes)
 
