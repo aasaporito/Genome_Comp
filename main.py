@@ -29,7 +29,7 @@ def process_data():
                         alignment = Alignment(entry)
                         # print(alignment)
 
-                        if alignment.IS_MAPPED:  # Prints mapped entries
+                        if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
                             print(alignment)
 
                             
@@ -39,7 +39,9 @@ def process_data():
                             edges = get_edges(sequences)
 
                             g1 = generate_diGraph(edges)
-                            print(len(g1.nodes()))
+                            if loop_test(g1):
+                                print("Loop found")
+                                save_graph(g1)
 
             lineCount += 1
 
@@ -52,15 +54,15 @@ def test_plot(sequence, k):
     #print(edges)
 
     g1 = generate_diGraph(edges)
+    print("Loop test: " + loop_test(g1))
 
     save_graph(g1)
     return g1
 
 def main():
-    #process_data()    
-    g1 = test_plot("ACTGAGTACCATGGAC",4)
-    loop_test(g1)
-    #print(g1.nodes())
+    process_data()    
+    #g1 = test_plot("ACTGAGTACCATGGAC",4)
+
 
 if __name__ == "__main__":
     main()
