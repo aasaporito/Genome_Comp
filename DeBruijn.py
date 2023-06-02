@@ -174,7 +174,7 @@ def is_traversable(graph):
         bool: Returns true if a graph is traversable as defined above.
     """
     nodes = graph.nodes()
-    traveled_nodes = list(nx.dfs_preorder_nodes(graph)) #  todo 5 (general) +0: Test this for discontinuous graphs
+    traveled_nodes = list(nx.dfs_preorder_nodes(graph)) 
 
     return len(traveled_nodes) == len(nodes)
 
