@@ -94,10 +94,22 @@ def save_graph(graph, alignment, sam_name):
         sam_name (str): Name of the SAM file storing the alignment.
     """
     file_name = generate_output_path(sam_name, alignment)
+
+    #  todo 13 (general) +50    : definetely doesnt work
+    nodes = graph.nodes()
+    node = None
+    for n in nodes:
+        node = n
+        break
+    nodes = nx.single_source_dijkstra_path(graph, node)
+    nodes = list(nodes.keys())
+
+    node_colors = ["red" if n in nodes else "blue" for n in graph.nodes()]
     
+
     ## Saves the graph as an image
     plt.rcParams['figure.figsize'] = [100, 100]
-    nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=100)
+    nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=100, node_color=node_colors)
 
     #Displays the graph, pauses running
     #plt.show()
@@ -143,7 +155,7 @@ def loop_test(graph):
     #Checks that no input or output edge exists twice
     is_loop = not(check_dupes(all_inputs) and check_dupes(all_outputs))
 
-    return is_loop and edges_eq_nodes and is_traversable(graph)
+    return is_loop and edges_eq_nodes and is_traversable(graph) and edge_check(graph)
 
 
 # Utilize that sets cannot have duplicates to efficiently check for dupes
@@ -173,8 +185,27 @@ def is_traversable(graph):
     Returns:
         bool: Returns true if a graph is traversable as defined above.
     """
-    nodes = graph.nodes()
-    traveled_nodes = list(nx.dfs_preorder_nodes(graph)) 
 
+    nodes = graph.nodes()
+    node = None
+    for n in nodes:
+        node = n
+        break
+    path = nx.single_source_dijkstra_path(graph, node)
+    print(path)
+
+    #traveled_nodes = list(nx.dfs_tree(graph)) #  todo 12 (general) 9: This does not work
+    return True #todo
     return len(traveled_nodes) == len(nodes)
+
+def edge_check(graph):
+    for node in graph.nodes():
+        in_neighbors = nx.neighbors(graph, node)
+
+        if len(list(nx.all_neighbors(graph, node))) - len(list(in_neighbors)) == 1:
+            continue
+
+        else:
+            return False
+    return True
 

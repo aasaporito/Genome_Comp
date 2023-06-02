@@ -19,6 +19,7 @@ def process_data():
     for file in files:
 
         with open(file, 'r') as infile:
+            loopCount = 0
             lineCount = 0
 
             for line in infile:
@@ -34,27 +35,34 @@ def process_data():
 
                             #This should be unnecessary due to preprocessing
                             if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
-                                print(alignment)
+                                #print(alignment)
                  
                                 #Find overlapping sequences
-                                sequences = get_counts_from_seq(alignment.SEQ, k=int(config['DEFAULT']['kmer']))
+                                sequences = get_counts_from_seq("ACTGAGTACCATGGAC",k=4)
                                 edges = get_edges(sequences)
 
                                 g1 = generate_diGraph(edges)
 
                                 if loop_test(g1):
                                     print("Loop found")
-                                    #  todo 10 (general) +0: log here
+                                    loopCount += 1
                                     save_graph(g1, alignment, file)
+                                    #  todo 10 (general) +0: log here
+                                    #save_graph(g1, alignment, file)
                                     
                                 else:
                                     print("No loop found\n\n")
+                                    save_graph(g1, alignment, file)
+                                    
+                           
+
 
                 lineCount += 1
+                print(loopCount/lineCount)
 
 def main():
     process_data()    
-    #g1 = test_plot("ACTGAGTACCATGGAC",4) #sequences = get_counts_from_seq("ATGGTATGTA", 3)
+    #g1 = test_plot("ACTGAGTACCATGGAC",k=4)
 
 
 if __name__ == "__main__":
