@@ -4,7 +4,19 @@
 import os
 import glob
 
+def is_header(entry):
+    """Summary
+        Helper function to determine if the current line is a header entry.
+    Args:
+        entry (str): A string read from a .sam file
+    
+    Returns:
+        bool: Returns true if the entry string is a header line.
+    """
 
+    if '@' in entry[0]:  # All varities of SAM headers begin with a @ followed by 2 char
+        return True
+        
 def get_files(path):
 	"""Summary
 		Finds all .sam files within a directory specified in config.ini

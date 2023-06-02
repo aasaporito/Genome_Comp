@@ -8,20 +8,6 @@ from file_tools import *
 
 import configparser
 
-
-def is_header(entry):
-    """Summary
-        Helper function to determine if the current line is a header entry.
-    Args:
-        entry (str): A string read from a .sam file
-    
-    Returns:
-        bool: Returns true if the entry string is a header line.
-    """
-
-    if '@' in entry[0]:  # All varities of SAM headers begin with a @ followed by 2 char
-        return True
-
 #
 # Current primary function to process data
 #  todo 2 (general) +0: Rework/make usable for test data
