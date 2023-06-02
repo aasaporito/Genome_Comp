@@ -8,6 +8,10 @@ def split_sam():
     file_count = 0
     out = []
     header = ""
+
+    print(files)
+    print(len(files))
+    
     for file in files:
         with open(file, 'r') as infile:
             for line in infile:
