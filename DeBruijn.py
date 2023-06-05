@@ -83,33 +83,30 @@ def generate_diGraph(edges):
 
 
 #  todo 3 (general) +0: Nested folders for each filename
-def save_graph(graph, alignment, sam_name):
+def save_graph(graph, nodes, alignment, sam_name):
     """Summary
         Saves a graph to disk. Requires a folder labeled "Output" (#  todo 4 (general) +0: Generate output folder <-).
         Stores with the name pattern: Output/fileName_alignmentName_MAPQUALITY.png
         Illegal characters in the filename are replaced with 2 '_'
+    
     Args:
         graph (DiGraph): A directional graph from networkx
+        nodes (list): A list of traversed nodes
         alignment (Alignment): An Alignment objected generated from a SAM entry
         sam_name (str): Name of the SAM file storing the alignment.
     """
     file_name = generate_output_path(sam_name, alignment)
 
-    #  todo 13 (general) +50    : definetely doesnt work
-    nodes = graph.nodes()
-    node = None
-    for n in nodes:
-        node = n
-        break
-    nodes = nx.single_source_dijkstra_path(graph, node)
-    nodes = list(nodes.keys())
-
-    node_colors = ["red" if n in nodes else "blue" for n in graph.nodes()]
+    
+    nodes = is_traversable(graph)[0]
+    node_colors = ["blue" if n in nodes else "yellow" for n in graph.nodes()]
+    node_colors[0] = "red"
+    node_colors[-1] = "red"
     
 
     ## Saves the graph as an image
     plt.rcParams['figure.figsize'] = [100, 100]
-    nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=100, node_color=node_colors)
+    nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=200, node_color=node_colors, **{"edgecolors": "tab:gray"})
 
     #Displays the graph, pauses running
     #plt.show()
@@ -130,7 +127,8 @@ def loop_test(graph):
         graph (DiGraph): A directional graph from networkx
     
     Returns:
-        bool: Indicates that the graph is a 1-directional closed circuit.
+        (bool, list): Indicates that the graph is a 1-directional closed circuit. A list of nodes
+                        that were traversed.
     """
     all_inputs = []
     all_outputs = []
@@ -154,8 +152,15 @@ def loop_test(graph):
 
     #Checks that no input or output edge exists twice
     is_loop = not(check_dupes(all_inputs) and check_dupes(all_outputs))
+    is_trav = is_traversable(graph)
+    edge_chec = edge_check(graph)
 
-    return is_loop and edges_eq_nodes and is_traversable(graph) and edge_check(graph)
+    # print(edges_eq_nodes)
+    # print(is_loop)
+    # print(is_trav[1])
+    # print(edge_chec)
+    #  todo 15 (general) +0: way too high of a loop find rate
+    return ((is_loop and edges_eq_nodes and is_trav[1] and edge_chec), is_trav[0])
 
 
 # Utilize that sets cannot have duplicates to efficiently check for dupes
@@ -183,26 +188,43 @@ def is_traversable(graph):
         graph (DiGraph): A directional graph from networkx
     
     Returns:
-        bool: Returns true if a graph is traversable as defined above.
+        Tuple: Returns the nodes traveled through. Returns true if a graph is traversable as 
+                defined above. The tuple is in the for of (nodes_traveled, bool)
     """
+    root = list(graph.nodes())
 
-    nodes = graph.nodes()
-    node = None
-    for n in nodes:
-        node = n
-        break
-    path = nx.single_source_dijkstra_path(graph, node)
-    print(path)
+    n = list(graph.neighbors(root[0]))
+    nodes_traveled = []
+    while len(n) == 1:
+        n = n[0]
+        if n in nodes_traveled:
+            if n == nodes_traveled[0] and len(nodes_traveled) == len(root):
+                #Back at starting node after travelling all nodes                
+                return (nodes_traveled, True)
+                
+            else:
+                return (nodes_traveled, False)
 
-    #traveled_nodes = list(nx.dfs_tree(graph)) #  todo 12 (general) 9: This does not work
-    return True #todo
-    return len(traveled_nodes) == len(nodes)
+        nodes_traveled.append(n)
+        
+        new_neighbor = list(graph.neighbors(n))
+        n = new_neighbor
+    return (nodes_traveled, False)
+
 
 def edge_check(graph):
+    """Summary
+        Checks if all nodes in a graph contain one input and one output edge.
+    Args:
+        graph (DiGraph): A networkx Directed Graph
+    
+    Returns:
+        bool: Returns true when all graph nodes have 1 input and one output edge,
+    """
     for node in graph.nodes():
         in_neighbors = nx.neighbors(graph, node)
-
-        if len(list(nx.all_neighbors(graph, node))) - len(list(in_neighbors)) == 1:
+        all_len = len(list(nx.all_neighbors(graph, node)))
+        if (all_len - len(list(in_neighbors)) == 1) and all_len == 2:
             continue
 
         else:

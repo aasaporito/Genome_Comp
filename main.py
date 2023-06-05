@@ -10,7 +10,7 @@ import configparser
 
 #
 # Current primary function to process data
-#  todo 2 (general) +0: Rework/make usable for test data
+
 def process_data():
     config = configparser.ConfigParser()
     config.read('config.ini')
@@ -38,27 +38,24 @@ def process_data():
                                 #print(alignment)
                  
                                 #Find overlapping sequences
-                                sequences = get_counts_from_seq("ACTGAGTACCATGGAC",k=4)
+                                sequences = get_counts_from_seq(alignment.SEQ, k=int(config['DEFAULT']['kmer']))
                                 edges = get_edges(sequences)
-
                                 g1 = generate_diGraph(edges)
 
-                                if loop_test(g1):
-                                    print("Loop found")
+                                lineCount += 1
+
+                                is_loop = loop_test(g1)
+                                if is_loop[0]:
+                                    print("\nLoop found")
                                     loopCount += 1
-                                    save_graph(g1, alignment, file)
+                                    save_graph(g1, is_loop[1], alignment, file)
                                     #  todo 10 (general) +0: log here
-                                    #save_graph(g1, alignment, file)
                                     
                                 else:
-                                    print("No loop found\n\n")
-                                    save_graph(g1, alignment, file)
+                                    print("\nNo loop found")
+                                    save_graph(g1, is_loop[1], alignment, file)
                                     
-                           
-
-
-                lineCount += 1
-                print(loopCount/lineCount)
+                            print("Loop rate: " + str(round(((loopCount/lineCount)*100), 2)) + "%\n")
 
 def main():
     process_data()    
