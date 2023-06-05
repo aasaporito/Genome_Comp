@@ -53,7 +53,7 @@ def process_data():
                                     
                                 else:
                                     print("\nNo loop found")
-                                    save_graph(g1, is_loop[1], alignment, file)
+                                    #save_graph(g1, is_loop[1], alignment, file)
                                     
                             print("Loop rate: " + str(round(((loopCount/lineCount)*100), 2)) + "%\n")
 
