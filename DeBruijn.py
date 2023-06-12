@@ -42,7 +42,6 @@ def get_counts_from_seq(seq, k=50, circular=True):
             collection[chunk] += 1  # Already exists in collection
         else:
             collection[chunk] = 1  # New entry to the collection
-
     return collection
 
 
@@ -105,7 +104,7 @@ def save_graph(graph, nodes, alignment, sam_name):
     
 
     ## Saves the graph as an image
-    plt.rcParams['figure.figsize'] = [100, 100]
+    plt.rcParams['figure.figsize'] = [100, 100] #todo 100x 100
     nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=200, node_color=node_colors, **{"edgecolors": "tab:gray"})
 
     #Displays the graph, pauses running

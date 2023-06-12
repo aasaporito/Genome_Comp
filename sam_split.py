@@ -24,7 +24,7 @@ def split_sam():
                     print("Header written to stream")
                 else:
                     alignment = Alignment(entry_list)
-                    if (alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15):  # Prints mapped entries
+                    if (alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 0):  # Prints mapped entries
                         del alignment
                         out.append(line)
                         char_count += len(line)
