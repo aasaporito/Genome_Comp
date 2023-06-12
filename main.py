@@ -38,7 +38,7 @@ def process_data():
                                 #print(alignment)
                  
                                 #Find overlapping sequences
-                                sequences = get_counts_from_seq("AGATGAATGGACCGGCCATATAAGT",k=4)
+                                sequences = get_counts_from_seq(alignment.SEQ,k=int(config['DEFAULT']['kmer']))
                                 edges = get_edges(sequences)
                                 g1 = generate_diGraph(edges)
 
@@ -54,8 +54,8 @@ def process_data():
                                     
                                 else:
                                     print("\nNo loop found")
-                                    save_graph(g1, is_loop[1], alignment, file)
-                                    exit() #todo erase
+                                    #save_graph(g1, is_loop[1], alignment, file)
+                                    #exit() #todo erase
                                     
                             print("Loop rate: " + str(round(((loopCount/lineCount)*100), 2)) + "%\n")
 
