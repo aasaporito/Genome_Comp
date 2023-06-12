@@ -5,6 +5,7 @@
 """
 import networkx as nx
 import matplotlib.pyplot as plt
+from processing_py import *
 
 from file_tools import *
 
@@ -63,55 +64,30 @@ def get_edges(collection):
                     edges.add((j[:-1], k[:-1]))  # Add overlap from j to k
                 if j[:-1] == k[:-1]:
                     edges.add((k[:-1], j[:-1]))  # Add overlap from k to j
-
     return edges
    
-def generate_diGraph(edges):
-    """Summary
-        Generates a directional graph from a collection of edges.
-    Args:
-        edges (list of tuples): A list containing tuples indicating the path of each edge.
-    
-    Returns:
-        DiGraph: A DiGraph object from the networkx library.
-    """
-    graph = nx.DiGraph()
-    graph.add_edges_from(edges)
+def plot_graph_from_edges(edges):
+    known_nodes = {}
+    pos = (0, 0)
+    WIDTH = 1800
+    HEIGHT = 1000
+    app = App(WIDTH, HEIGHT)
+    app.background(255, 255, 255)
 
-    return graph
+    if pos[0] + 4 >= WIDTH:
+        
+    app.fill(255, 0, 0)
+    app.rect(pos[0], pos[1], 4, 4) #node size: 4x4 (x0, y0, x1, y1)
+    app.redraw()
+
+    for pair in edges:
+        for edge in pair:
+            if edge in known_nodes:
+
+                print(edge)
 
 
-#  todo 3 (general) +0: Nested folders for each filename
-def save_graph(graph, nodes, alignment, sam_name):
-    """Summary
-        Saves a graph to disk. Requires a folder labeled "Output" (#  todo 4 (general) +0: Generate output folder <-).
-        Stores with the name pattern: Output/fileName_alignmentName_MAPQUALITY.png
-        Illegal characters in the filename are replaced with 2 '_'
-    
-    Args:
-        graph (DiGraph): A directional graph from networkx
-        nodes (list): A list of traversed nodes
-        alignment (Alignment): An Alignment objected generated from a SAM entry
-        sam_name (str): Name of the SAM file storing the alignment.
-    """
-    file_name = generate_output_path(sam_name, alignment)
 
-    
-    nodes = is_traversable(graph)[0]
-    node_colors = ["blue" if n in nodes else "yellow" for n in graph.nodes()]
-    node_colors[0] = "red"
-    node_colors[-1] = "red"
-    
-
-    ## Saves the graph as an image
-    plt.rcParams['figure.figsize'] = [100, 100] #todo 100x 100
-    nx.draw_networkx(graph, arrows=True, with_labels=False, node_size=200, node_color=node_colors, **{"edgecolors": "tab:gray"})
-
-    #Displays the graph, pauses running
-    #plt.show()
-
-    plt.savefig(file_name, format="PNG")
-    plt.clf()
 
 def loop_test(graph):
     """Summary
