@@ -73,7 +73,7 @@ image.save("image.png", "PNG")
 for pair in nodes:
     for node in pair:
         if node not in known_nodes:
-            current_pos = draw_square(image, ((R * math.cos(theta)+pos[0]), R * math.sin(theta)+pos[1]), NODE_SIZE)
+            current_pos = draw_square(image, (round(R * math.cos(theta)+pos[0]), round(R * math.sin(theta)+pos[1])), NODE_SIZE)
             known_nodes.update(store_pos(current_pos, node))
             theta += 2 * PI / (total_nodes+1)
         #else:
