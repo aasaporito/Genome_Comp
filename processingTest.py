@@ -1,85 +1,58 @@
-from processing_py import *
+from PIL import Image, ImageDraw
+import math
 
+
+def draw_square(app, pos, NODE_SIZE):
+    x, y = pos
+    img1 = ImageDraw.Draw(app)
+    img1.rectangle((x, y, x + NODE_SIZE, y + NODE_SIZE),
+                   fill=(0, 192, 192), outline=(255, 255, 255))
+
+
+def draw_line_down(app, pos, LINE_SPACING):
+    # line down
+    app.stroke(0, 255, 0)
+    app.line(pos[0], pos[1] - LINE_SPACING, pos[0], pos[1])
+
+
+def store_pos(pos, node):
+    name = node[0]
+    x, y = pos
+
+    return {name: pos}
+
+
+nodes = {('ATA', 'TAT'), ('AAG', 'AGT'), ('GAA', 'AAT'), ('TGG', 'GGA'), ('GGA', 'GAC'), ('GTA', 'TAG'), ('AGT', 'GTA'), ('ATG', 'TGA'), ('TGA', 'GAA'), ('CAT', 'ATA'), ('CCG', 'CGG'), ('AGA', 'GAT'), ('ATA', 'ATA'),
+         ('TAT', 'ATA'), ('GCC', 'CCA'), ('ATA', 'TAA'), ('CCA', 'CAT'), ('CGG', 'GGC'), ('AAT', 'ATG'), ('GGC', 'GCC'), ('GAC', 'ACC'), ('ATG', 'TGG'), ('ATG', 'ATG'), ('GAT', 'ATG'), ('TAA', 'AAG'), ('TAG', 'AGA'), ('ACC', 'CCG')}
 
 known_nodes = {}
-pos = (2, 2)
-total_nodes = 1000
+total_nodes = 5
 
 WIDTH = 1800
-HEIGHT = 1000
-NODE_SIZE = 4
+HEIGHT = 1800
+
+NODE_SIZE = 6
 LINE_SPACING = 10
 
-app = App(WIDTH, HEIGHT)
-app.background(255, 255, 255)
+R = WIDTH * 0.45
+HALF_NODE = int(NODE_SIZE / 2)
+
+PI = math.pi
+
+theta = 0
+pos = (WIDTH / 2, HEIGHT / 2)
+
+image = Image.new('RGB', (WIDTH, HEIGHT), (255, 255, 255))
+image.save("image.png", "PNG")
 
 
-HALF_NODE = int(NODE_SIZE/2)
-MAX_COL_SIZE = 300
-n = 0
-app.rectMode(CENTER)
-TOTAL_ROWS = 35
-i = 0
+draw_square(image, pos, NODE_SIZE)
 
-while i < TOTAL_ROWS:
-    print(i)
-    #Left to right
-    while n < MAX_COL_SIZE:
-        inc = (WIDTH / MAX_COL_SIZE) #spacing
+while theta < (PI * 2):
 
-        if n != 0 :
-            pos = pos[0] + inc, pos[1]
-        app.noStroke()
-        app.fill(255, 0, 0)
-        app.rect(pos[0], pos[1], NODE_SIZE, NODE_SIZE) #node size: 4x4 (x0, y0, x1, y1)
+    draw_square(image, ((R * math.cos(theta)+pos[0]), R * math.sin(theta)+pos[1]), NODE_SIZE)
+    theta += 2 * PI / total_nodes
+    print(theta)
 
-        #Line between nodes
-        app.stroke(0, 0, 0)
-        app.line(pos[0]+HALF_NODE, pos[1], pos[0]-inc-HALF_NODE, pos[1])
-
-        n += 1
-    app.redraw()
-    pos = pos[0], pos[1] + NODE_SIZE + LINE_SPACING
-    n = 0
-    #line down
-    app.stroke(0, 255, 0)
-    app.line(pos[0], pos[1] - LINE_SPACING, pos[0], pos[1])
-    #Right to left
-    while n < MAX_COL_SIZE:
-        inc = (WIDTH / MAX_COL_SIZE) #spacing
-        if n != 0 :
-            pos = pos[0] - inc, pos[1]
-
-        app.noStroke()
-        app.fill(255, 0, 0)
-        app.rect(pos[0], pos[1], NODE_SIZE, NODE_SIZE) #node size: 4x4 (x0, y0, x1, y1)
-
-        #Line between nodes
-        app.stroke(0, 0, 0)
-        app.line(pos[0]+HALF_NODE, pos[1], pos[0]-inc-HALF_NODE, pos[1])
-
-        n += 1
-
-    pos = pos[0], pos[1] + NODE_SIZE + LINE_SPACING
-    n = 0
-    #line down
-    app.stroke(0, 255, 0)
-    app.line(pos[0], pos[1] - LINE_SPACING, pos[0], pos[1])
-    i += 1
-    app.redraw()
-app.redraw()
-
-# app.translate(WIDTH/2, HEIGHT/2) # center the circle
-# while theta < 2 * PI:
-#     x = R * math.cos(theta)
-#     y = R * math.sin(theta)
-#     app.fill(255, 0, 0)
-#     app.rect(x, y, NODE_SIZE, NODE_SIZE) #node size: 4x4 (x0, y0, x1, y1)
-#     theta += 2 * PI / total_nodes 
-# app.redraw()
-
-# for pair in edges:1
-#     for edge in pair:
-#         if edge in known_nodes:
-
-#             print(edge)
+image.show()
+#known_nodes.update(store_pos(pos, [node]))
