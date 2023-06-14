@@ -41,12 +41,10 @@ def process_data():
                                 sequences = get_counts_from_seq(alignment.SEQ, int(config["DEFAULT"]["kmer"]))
                                 edges = get_edges(sequences)
                                 print("Generating plot")
-                                generate_plot(edges)
-                                
+                                g1 = generate_plot(edges)
+                                exit()
                                 lineCount += 1
 
-                                if lineCount == 5:
-                                    exit()
                                 # is_loop = loop_test(g1)
                                 # if is_loop[0]:
                                 #     print("\nLoop found")
