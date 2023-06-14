@@ -5,7 +5,7 @@ from DeBruijn import *
 from Alignment import Alignment
 from tests import *
 from file_tools import *
-
+from processingTest import *
 import configparser
 
 #
@@ -38,25 +38,26 @@ def process_data():
                                 #print(alignment)
                  
                                 #Find overlapping sequences
-                                sequences = get_counts_from_seq("AGATGAATGGACCGGCCATATAAGT",k=6)
+                                sequences = get_counts_from_seq(alignment.SEQ, int(config["DEFAULT"]["kmer"]))
                                 edges = get_edges(sequences)
-                                print(edges)
-                                g1 = plot_graph_from_edges(edges)
-
+                                print("Generating plot")
+                                generate_plot(edges)
+                                
                                 lineCount += 1
 
-                                is_loop = loop_test(g1)
-                                if is_loop[0]:
-                                    print("\nLoop found")
-                                    loopCount += 1
-                                    save_graph(g1, is_loop[1], alignment, file)
-                                    #  todo 10 (general) +0: log here
-                                    #exit() #todo erase
+                                if lineCount == 5:
+                                    exit()
+                                # is_loop = loop_test(g1)
+                                # if is_loop[0]:
+                                #     print("\nLoop found")
+                                #     loopCount += 1
+                                #     save_graph(g1, is_loop[1], alignment, file)
+                                #     #  todo 10 (general) +0: log here
+
                                     
-                                else:
-                                    print("\nNo loop found")
-                                    #save_graph(g1, is_loop[1], alignment, file)
-                                    #exit() #todo erase
+                                # else:
+                                #     print("\nNo loop found")
+                                    
                                     
                             print("Loop rate: " + str(round(((loopCount/lineCount)*100), 2)) + "%\n")
 
