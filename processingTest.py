@@ -49,8 +49,9 @@ def update_weights(known_nodes, node, edge_type, image, NODE_SIZE):
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
 
 def generate_plot(nodes):
-    nodes = list({('ATA', 'TAT'), ('AAG', 'AGT'), ('GAA', 'AAT'), ('TGG', 'GGA'), ('GGA', 'GAC'), ('GTA', 'TAG'), ('AGT', 'GTA'), ('ATG', 'TGA'), ('TGA', 'GAA'), ('CAT', 'ATA'), ('CCG', 'CGG'), ('AGA', 'GAT'), ('ATA', 'ATA'), ('TAT', 'ATA'), ('GCC', 'CCA'), ('ATA', 'TAA'), ('CCA', 'CAT'), ('CGG', 'GGC'), ('AAT', 'ATG'), ('GGC', 'GCC'), ('GAC', 'ACC'), ('ATG', 'TGG'), ('ATG', 'ATG'), ('GAT', 'ATG'), ('TAA', 'AAG'), ('TAG', 'AGA'), ('ACC', 'CCG')})
-
+    nodes = list({('ATGGA', 'TGGAC'), ('TATAA', 'ATAAG'), ('TAGAT', 'AGATG'), ('AGATG', 'GATGA'), ('TAAGT', 'AAGTA'), ('ACCGG', 'CCGGC'), ('GGCCA', 'GCCAT'), ('ATATA', 'TATAA'), ('GACCG', 'ACCGG'), ('AATGG', 'ATGGA'), ('CGGCC', 'GGCCA'), ('ATGAA', 'TGAAT'), ('AAGTA', 'AGTAG'), ('GCCAT', 'CCATA'), ('CCATA', 'CATAT'), ('CATAT', 'ATATA'), ('TGAAT', 'GAATG'), ('AGTAG', 'GTAGA'), ('CCGGC', 'CGGCC'), ('GGACC', 'GACCG'), ('ATAAG', 'TAAGT'), ('GAATG', 'AATGG'), ('GTAGA', 'TAGAT'), ('TGGAC', 'GGACC'), ('GATGA', 'ATGAA')})
+    #nodes[0] = nodes[0][0] +"Z", nodes[0][1]
+    #print(nodes[0])
     known_nodes = {}
     total_nodes = len(nodes)
     WIDTH, HEIGHT = 1500, 1500
@@ -87,11 +88,14 @@ def generate_plot(nodes):
         
         #todo are weights truly needed beyond coloring? or even needed for coloring?
         #todo seems to plot graphs fully green even if they shouldnt be
-        update_weights(known_nodes, node1, "input", image, NODE_SIZE) #<- is the problem that the first node iterated technically isn't an input?, most likely yes
-        update_weights(known_nodes, node2, "output", image, NODE_SIZE)
+
+        update_weights(known_nodes, node1, "output", image, NODE_SIZE) #<- is the problem that the first node iterated technically isn't an input?, most likely yes   
+        update_weights(known_nodes, node2, "input", image, NODE_SIZE)
 
         known_nodes[node1][2].append(node2)
         known_nodes[node2][2].append(node1)
+
+
         if len(known_nodes[node1][2]) > 2 :
             update_weights(known_nodes, node1, "failed", image, NODE_SIZE)
         if len(known_nodes[node2][2]) > 2:
@@ -99,6 +103,6 @@ def generate_plot(nodes):
 
         img1 = ImageDraw.Draw(image)
         img1.line([known_nodes[node1][0], known_nodes[node2][0]], fill=(0,0,0))
-    #print(known_nodes)
+    print(known_nodes)
 
     image.show()
