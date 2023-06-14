@@ -21,11 +21,15 @@ def store_pos(pos, node):
     name = node
     x, y = pos
     weight = 0
+    connections = []
+    return {name: [pos, weight, connections]}
 
-    return {name: [pos, weight]}
-
-def update_weights(known_nodes, node, image, NODE_SIZE):
-    known_nodes[node][1] += 1
+def update_weights(known_nodes, node, edge_type, image, NODE_SIZE):
+    if edge_type == "input":
+        known_nodes[node][1] += 1
+    else: #output edge
+        known_nodes[node][1] += 9
+        
     weight = known_nodes[node][1]
 
     match (weight):
@@ -33,17 +37,17 @@ def update_weights(known_nodes, node, image, NODE_SIZE):
             print("Node not traveled: " + node)
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
         case 1:
-            print("Node has 1 edge: " + node) #
+            print("Node has 1 input edge: " + node) #
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
-        case 2:
-            print("Node has 2 edges: " + node) # perfect
+        case 10:
+            print("Node has 1 input and 1 output edge: " + node) # perfect
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="green")
         case _:
             print("Node has >2 edges: " + node) #problem area
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
 
 
-nodes = list({('ATA', 'TAT'), ('AAG', 'AGT'), ('GAA', 'AAT'), ('TGG', 'GGA'), ('GGA', 'GAC'), ('GTA', 'TAG'), ('AGT', 'GTA'), ('ATG', 'TGA'), ('TGA', 'GAA'), ('CAT', 'ATA'), ('CCG', 'CGG'), ('AGA', 'GAT'), ('ATA', 'ATA'), ('TAT', 'ATA'), ('GCC', 'CCA'), ('ATA', 'TAA'), ('CCA', 'CAT'), ('CGG', 'GGC'), ('AAT', 'ATG'), ('GGC', 'GCC'), ('GAC', 'ACC'), ('ATG', 'TGG'), ('ATG', 'ATG'), ('GAT', 'ATG'), ('TAA', 'AAG'), ('TAG', 'AGA'), ('ACC', 'CCG')})
+nodes = list({('TGGAC', 'GGACC'), ('GGACC', 'GACCG'), ('AGTAG', 'GTAGA'), ('GCCAT', 'CCATA'), ('TATAA', 'ATAAG'), ('CCGGC', 'CGGCC'), ('GACCG', 'ACCGG'), ('CCATA', 'CATAT'), ('TAGAT', 'AGATG'), ('GATGA', 'ATGAA'), ('TAAGT', 'AAGTA'), ('AGATG', 'GATGA'), ('CATAT', 'ATATA'), ('AAGTA', 'AGTAG'), ('TGAAT', 'GAATG'), ('ATGGA', 'TGGAC'), ('AATGG', 'ATGGA'), ('ACCGG', 'CCGGC'), ('GGCCA', 'GCCAT'), ('ATATA', 'TATAA'), ('ATAAG', 'TAAGT'), ('CGGCC', 'GGCCA'), ('GAATG', 'AATGG'), ('ATGAA', 'TGAAT'), ('GTAGA', 'TAGAT')})
 
 known_nodes = {}
 total_nodes = len(nodes)
@@ -76,19 +80,22 @@ for pair in nodes:
             current_pos = draw_square(image, (round(R * math.cos(theta)+pos[0]), round(R * math.sin(theta)+pos[1])), NODE_SIZE)
             known_nodes.update(store_pos(current_pos, node))
             theta += 2 * PI / (total_nodes+1)
-        #else:
-        #    print("Node exists @" + str(known_nodes[node]))
-        #    draw_square(image, known_nodes[node], NODE_SIZE, color=False)
 
-#todo constructs a nondirected graph, needs to be a directed graph
-# could to input weight of 1, output weight of 10, green == 11.
-# 
+
 for pair in nodes:
     node1 = pair[0]
     node2 = pair[1]
+    
+    #todo are weights truly needed beyond coloring? or even needed for coloring?
+    update_weights(known_nodes, node1, "input", image, NODE_SIZE)
+    update_weights(known_nodes, node2, "output", image, NODE_SIZE)
 
-    update_weights(known_nodes, node1, image, NODE_SIZE)
-    update_weights(known_nodes, node2, image, NODE_SIZE)
+    known_nodes[node1][2].append(node2)
+    known_nodes[node2][2].append(node1)
+    if len(known_nodes[node1][2]) > 2:
+        update_weights(known_nodes, node1, "output", image, NODE_SIZE)
+    if len(known_nodes[node2][2]) > 2:
+        update_weights(known_nodes, node2, "output", image, NODE_SIZE)
 
     img1 = ImageDraw.Draw(image)
     img1.line([known_nodes[node1][0], known_nodes[node2][0]], fill=(0,0,0))

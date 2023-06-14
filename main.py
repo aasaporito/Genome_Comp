@@ -38,8 +38,9 @@ def process_data():
                                 #print(alignment)
                  
                                 #Find overlapping sequences
-                                sequences = get_counts_from_seq("AGATGAATGGACCGGCCATATAAGT",k=4)
+                                sequences = get_counts_from_seq("AGATGAATGGACCGGCCATATAAGT",k=6)
                                 edges = get_edges(sequences)
+                                print(edges)
                                 g1 = plot_graph_from_edges(edges)
 
                                 lineCount += 1
