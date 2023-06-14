@@ -1,0 +1,2 @@
+Should produce a loop:
+{('ATGGA', 'TGGAC'), ('TATAA', 'ATAAG'), ('TAGAT', 'AGATG'), ('AGATG', 'GATGA'), ('TAAGT', 'AAGTA'), ('ACCGG', 'CCGGC'), ('GGCCA', 'GCCAT'), ('ATATA', 'TATAA'), ('GACCG', 'ACCGG'), ('AATGG', 'ATGGA'), ('CGGCC', 'GGCCA'), ('ATGAA', 'TGAAT'), ('AAGTA', 'AGTAG'), ('GCCAT', 'CCATA'), ('CCATA', 'CATAT'), ('CATAT', 'ATATA'), ('TGAAT', 'GAATG'), ('AGTAG', 'GTAGA'), ('CCGGC', 'CGGCC'), ('GGACC', 'GACCG'), ('ATAAG', 'TAAGT'), ('GAATG', 'AATGG'), ('GTAGA', 'TAGAT'), ('TGGAC', 'GGACC'), ('GATGA', 'ATGAA')}
