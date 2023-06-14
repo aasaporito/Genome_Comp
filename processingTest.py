@@ -26,9 +26,11 @@ def store_pos(pos, node):
 
 def update_weights(known_nodes, node, edge_type, image, NODE_SIZE):
     if edge_type == "input":
-        known_nodes[node][1] += 1
-    else: #output edge
-        known_nodes[node][1] += 9
+        known_nodes[node][1] += 2
+    elif edge_type == "output": #output edge
+        known_nodes[node][1] += 4
+    else:
+        known_nodes[node][1] += 99
         
     weight = known_nodes[node][1]
 
@@ -36,10 +38,10 @@ def update_weights(known_nodes, node, edge_type, image, NODE_SIZE):
         case 0:
             #print("Node not traveled: " + node)
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
-        case 1:
+        case 2:
             #print("Node has 1 input edge: " + node) #
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
-        case 10:
+        case 6:
             #print("Node has 1 input and 1 output edge: " + node) # perfect
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="green")
         case _:
@@ -47,7 +49,7 @@ def update_weights(known_nodes, node, edge_type, image, NODE_SIZE):
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
 
 def generate_plot(nodes):
-    nodes = list({('ATAZ', 'TAT'), ('AAG', 'AGT'), ('GAA', 'AAT'), ('TGG', 'GGA'), ('GGA', 'GAC'), ('GTA', 'TAG'), ('AGT', 'GTA'), ('ATG', 'TGA'), ('TGA', 'GAA'), ('CAT', 'ATA'), ('CCG', 'CGG'), ('AGA', 'GAT'), ('ATA', 'ATA'), ('TAT', 'ATA'), ('GCC', 'CCA'), ('ATA', 'TAA'), ('CCA', 'CAT'), ('CGG', 'GGC'), ('AAT', 'ATG'), ('GGC', 'GCC'), ('GAC', 'ACC'), ('ATG', 'TGG'), ('ATG', 'ATG'), ('GAT', 'ATG'), ('TAA', 'AAG'), ('TAG', 'AGA'), ('ACC', 'CCG')})
+    nodes = list({('ATA', 'TAT'), ('AAG', 'AGT'), ('GAA', 'AAT'), ('TGG', 'GGA'), ('GGA', 'GAC'), ('GTA', 'TAG'), ('AGT', 'GTA'), ('ATG', 'TGA'), ('TGA', 'GAA'), ('CAT', 'ATA'), ('CCG', 'CGG'), ('AGA', 'GAT'), ('ATA', 'ATA'), ('TAT', 'ATA'), ('GCC', 'CCA'), ('ATA', 'TAA'), ('CCA', 'CAT'), ('CGG', 'GGC'), ('AAT', 'ATG'), ('GGC', 'GCC'), ('GAC', 'ACC'), ('ATG', 'TGG'), ('ATG', 'ATG'), ('GAT', 'ATG'), ('TAA', 'AAG'), ('TAG', 'AGA'), ('ACC', 'CCG')})
 
     known_nodes = {}
     total_nodes = len(nodes)
@@ -91,9 +93,9 @@ def generate_plot(nodes):
         known_nodes[node1][2].append(node2)
         known_nodes[node2][2].append(node1)
         if len(known_nodes[node1][2]) > 2 :
-            update_weights(known_nodes, node1, "output", image, NODE_SIZE)
+            update_weights(known_nodes, node1, "failed", image, NODE_SIZE)
         if len(known_nodes[node2][2]) > 2:
-            update_weights(known_nodes, node2, "output", image, NODE_SIZE)
+            update_weights(known_nodes, node2, "failed", image, NODE_SIZE)
 
         img1 = ImageDraw.Draw(image)
         img1.line([known_nodes[node1][0], known_nodes[node2][0]], fill=(0,0,0))
