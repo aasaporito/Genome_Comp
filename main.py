@@ -23,7 +23,6 @@ def process_data():
             lineCount = 0
 
             for line in infile:
-
                 match lineCount:
                     case -1:
                         break  # Avoid reading the whole file, for now
@@ -37,11 +36,12 @@ def process_data():
                             if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
                  
                                 #Find overlapping sequences
-                                sequences = get_counts_from_seq(alignment.SEQ, int(config["DEFAULT"]["kmer"]))
+                                sequences = get_counts_from_seq(alignment.SEQ + "Z", int(config["DEFAULT"]["kmer"]))
                                 edges = get_edges(sequences)
+
                                 print("Generating plot")
-                                g1 = generate_plot(edges)
-                                exit()
+                                g1 = generate_plot(edges, alignment.NAME)
+
                                 lineCount += 1
 
                                 # is_loop = loop_test(g1)

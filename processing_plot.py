@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw
 import math
-
+import os
 
 def draw_square(image, pos, NODE_SIZE, color=""):
     x, y = pos
@@ -48,7 +48,19 @@ def update_weights(known_nodes, node, edge_type, image, NODE_SIZE):
             #print("Node has >2 edges: " + node) #problem area
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
 
-def generate_plot(nodes):
+def generateOutput(fname, seq, image):
+    fname = fname.replace("/", "_")
+    path = 'Output/' + fname + "/"
+    print(path)
+    if not os.path.exists(path):  # path exists, create new sub file name
+        os.makedirs(path)
+
+    with open(path + "sequence" + '.txt', 'w') as file:
+        file.write(seq)
+
+    image.save(path + "plot" + '.png')
+
+def generate_plot(nodes, fname):
 
     nodes = list(nodes)
     key1 = nodes[0][0]
@@ -77,13 +89,14 @@ def generate_plot(nodes):
     current_pos = draw_square(image, (round(R * math.cos(theta)+pos[0]), round(R * math.sin(theta)+pos[1])), NODE_SIZE)
     known_nodes.update(store_pos(current_pos, key1))
     node1 = key1
-
+    seq = node1
     for i in range(len(nodes)):
         node2 = nodes_dict[node1]
 
         current_pos = draw_square(image, (round(R * math.cos(theta)+pos[0]), round(R * math.sin(theta)+pos[1])), NODE_SIZE)
         known_nodes.update(store_pos(current_pos, node2))
         theta += 2 * PI / (total_nodes+1)
+        seq = node1 + node2
         node1 = node2
 
     for pair in nodes:
@@ -108,4 +121,7 @@ def generate_plot(nodes):
         img1 = ImageDraw.Draw(image)
         img1.line([known_nodes[node1][0], known_nodes[node2][0]], fill=(0,0,0))
 
-    image.show()
+    #image.show()
+
+    #if looptest == true
+    generateOutput(fname, seq, image)
