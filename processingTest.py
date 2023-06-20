@@ -5,7 +5,7 @@ import math
 def draw_square(image, pos, NODE_SIZE, color=""):
     x, y = pos
     img1 = ImageDraw.Draw(image)
-    c = (0, 192, 192)
+    c = (0, 0, 192)
     if color == "red":
         c = (255, 0, 0)
     elif color == "green":
@@ -49,9 +49,11 @@ def update_weights(known_nodes, node, edge_type, image, NODE_SIZE):
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
 
 def generate_plot(nodes):
-    nodes = list({('ATGGA', 'TGGAC'), ('TATAA', 'ATAAG'), ('TAGAT', 'AGATG'), ('AGATG', 'GATGA'), ('TAAGT', 'AAGTA'), ('ACCGG', 'CCGGC'), ('GGCCA', 'GCCAT'), ('ATATA', 'TATAA'), ('GACCG', 'ACCGG'), ('AATGG', 'ATGGA'), ('CGGCC', 'GGCCA'), ('ATGAA', 'TGAAT'), ('AAGTA', 'AGTAG'), ('GCCAT', 'CCATA'), ('CCATA', 'CATAT'), ('CATAT', 'ATATA'), ('TGAAT', 'GAATG'), ('AGTAG', 'GTAGA'), ('CCGGC', 'CGGCC'), ('GGACC', 'GACCG'), ('ATAAG', 'TAAGT'), ('GAATG', 'AATGG'), ('GTAGA', 'TAGAT'), ('TGGAC', 'GGACC'), ('GATGA', 'ATGAA')})
-    #nodes[0] = nodes[0][0] +"Z", nodes[0][1]
-    #print(nodes[0])
+
+    nodes = list(nodes)
+    key1 = nodes[0][0]
+    nodes_dict = dict(nodes)
+    
     known_nodes = {}
     total_nodes = len(nodes)
     WIDTH, HEIGHT = 1500, 1500
@@ -71,16 +73,18 @@ def generate_plot(nodes):
     pos = (WIDTH / 2, HEIGHT / 2)
 
     image = Image.new('RGB', (WIDTH, HEIGHT), (255, 255, 255))
-    image.save("image.png", "PNG")
 
-    #Construct the nodes and stores their coordinates
-    for pair in nodes:
-        for node in pair:
-            if node not in known_nodes:
-                current_pos = draw_square(image, (round(R * math.cos(theta)+pos[0]), round(R * math.sin(theta)+pos[1])), NODE_SIZE)
-                known_nodes.update(store_pos(current_pos, node))
-                theta += 2 * PI / (total_nodes+1)
+    current_pos = draw_square(image, (round(R * math.cos(theta)+pos[0]), round(R * math.sin(theta)+pos[1])), NODE_SIZE)
+    known_nodes.update(store_pos(current_pos, key1))
+    node1 = key1
 
+    for i in range(len(nodes)):
+        node2 = nodes_dict[node1]
+
+        current_pos = draw_square(image, (round(R * math.cos(theta)+pos[0]), round(R * math.sin(theta)+pos[1])), NODE_SIZE)
+        known_nodes.update(store_pos(current_pos, node2))
+        theta += 2 * PI / (total_nodes+1)
+        node1 = node2
 
     for pair in nodes:
         node1 = pair[0]
@@ -103,6 +107,5 @@ def generate_plot(nodes):
 
         img1 = ImageDraw.Draw(image)
         img1.line([known_nodes[node1][0], known_nodes[node2][0]], fill=(0,0,0))
-    print(known_nodes)
 
     image.show()

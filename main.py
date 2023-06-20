@@ -17,7 +17,7 @@ def process_data():
 
     files = get_files(str(config['DEFAULT']['data_path']))
     for file in files:
-
+        print(file)
         with open(file, 'r') as infile:
             loopCount = 0
             lineCount = 0
@@ -35,7 +35,6 @@ def process_data():
 
                             #This should be unnecessary due to preprocessing
                             if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
-                                #print(alignment)
                  
                                 #Find overlapping sequences
                                 sequences = get_counts_from_seq(alignment.SEQ, int(config["DEFAULT"]["kmer"]))
