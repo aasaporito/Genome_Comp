@@ -5,7 +5,7 @@ from DeBruijn import *
 from Alignment import Alignment
 from tests import *
 from file_tools import *
-from processingTest import *
+from processing_plot import *
 import configparser
 
 #
