@@ -5,7 +5,7 @@ from DeBruijn import *
 from Alignment import Alignment
 from tests import *
 from file_tools import *
-
+from processing_plot import *
 import configparser
 
 #
@@ -17,13 +17,12 @@ def process_data():
 
     files = get_files(str(config['DEFAULT']['data_path']))
     for file in files:
-
+        print(file)
         with open(file, 'r') as infile:
             loopCount = 0
             lineCount = 0
 
             for line in infile:
-
                 match lineCount:
                     case -1:
                         break  # Avoid reading the whole file, for now
@@ -35,27 +34,28 @@ def process_data():
 
                             #This should be unnecessary due to preprocessing
                             if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
-                                #print(alignment)
                  
                                 #Find overlapping sequences
-                                sequences = get_counts_from_seq(alignment.SEQ,k=int(config['DEFAULT']['kmer']))
+                                sequences = get_counts_from_seq(alignment.SEQ + "Z", int(config["DEFAULT"]["kmer"]))
                                 edges = get_edges(sequences)
-                                g1 = generate_diGraph(edges)
 
+                                print("Generating plot")
+                                
+                                g1 = generate_plot(edges, alignment.NAME)
+                               
                                 lineCount += 1
 
-                                is_loop = loop_test(g1)
-                                if is_loop[0]:
-                                    print("\nLoop found")
-                                    loopCount += 1
-                                    save_graph(g1, is_loop[1], alignment, file)
-                                    #  todo 10 (general) +0: log here
-                                    #exit() #todo erase
+                                # is_loop = loop_test(g1)
+                                # if is_loop[0]:
+                                #     print("\nLoop found")
+                                #     loopCount += 1
+                                #     save_graph(g1, is_loop[1], alignment, file)
+                                #     #  todo 10 (general) +0: log here
+
                                     
-                                else:
-                                    print("\nNo loop found")
-                                    #save_graph(g1, is_loop[1], alignment, file)
-                                    #exit() #todo erase
+                                # else:
+                                #     print("\nNo loop found")
+                                    
                                     
                             print("Loop rate: " + str(round(((loopCount/lineCount)*100), 2)) + "%\n")
 
