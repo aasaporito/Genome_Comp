@@ -125,3 +125,4 @@ def generate_plot(nodes, fname):
 
     #if looptest == true
     generateOutput(fname, seq, image)
+    return seq

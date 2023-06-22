@@ -40,8 +40,9 @@ def process_data():
                                 edges = get_edges(sequences)
 
                                 print("Generating plot")
+                                
                                 g1 = generate_plot(edges, alignment.NAME)
-
+                               
                                 lineCount += 1
 
                                 # is_loop = loop_test(g1)
