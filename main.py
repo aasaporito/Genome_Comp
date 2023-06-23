@@ -38,8 +38,6 @@ def process_data():
                                 #Find overlapping sequences
                                 sequences = get_counts_from_seq(alignment.SEQ + "Z", int(config["DEFAULT"]["kmer"]))
                                 edges = get_edges(sequences)
-
-                                print("Generating plot")
                                 
                                 g1 = generate_plot(edges, alignment.NAME)
                                
