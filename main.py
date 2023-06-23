@@ -36,7 +36,7 @@ def process_data():
                             if alignment.IS_MAPPED and int(alignment.MAP_QUALITY) <= 15:  # Prints mapped entries
                  
                                 #Find overlapping sequences
-                                sequences = get_counts_from_seq(alignment.SEQ + "Z", int(config["DEFAULT"]["kmer"]))
+                                sequences = get_counts_from_seq(alignment.SEQ, int(config["DEFAULT"]["kmer"]))
                                 edges = get_edges(sequences)
                                 
                                 g1 = generate_plot(edges, alignment.NAME)
