@@ -44,7 +44,7 @@ def update_weights(known_nodes, node, edge_type, image, NODE_SIZE):
         case 2:
             #print("Node has 1 input edge: " + node) #
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="red")
-        case 6:
+        case 21:
             # print("Node has 1 input and 1 output edge: " + node) # perfect
             draw_square(image, known_nodes[node][0], NODE_SIZE, color="green")
         case _:
@@ -135,7 +135,7 @@ def generate_plot(nodes, fname):
 
     # if looptest == true
     print("Checking circularity")
-    print(is_traversable(known_nodes))
+    #print(is_traversable(known_nodes))
     for key in known_nodes:
         if not edge_check(known_nodes[key]):
             print("Edges are not balanced for a traverable graph")
